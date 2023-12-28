@@ -3,3 +3,4 @@ langchain
 langchain_google_genai
 Pillow
 google-search-results
+duckduckgo-search
