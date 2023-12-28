@@ -25,25 +25,25 @@ genai.configure(api_key=API_KEY)
 # st.image("./Google-Gemini-AI-Logo.png", width=200)
 st.write("")
 
-gemini_pro, gemini_vision = st.tabs(["CODA", "CODA Vision"])
+gemini_vision = st.tabs(["CODA Vision"])
 
 
 def main():
-    with gemini_pro:
-        st.header("Interact with CODA")
-        st.write("")
+    # with gemini_pro:
+    #     st.header("Interact with CODA")
+    #     st.write("")
 
-        prompt = st.text_input("prompt please...", placeholder="Prompt", label_visibility="visible")
-        model = genai.GenerativeModel("gemini-pro")
+    #     prompt = st.text_input("prompt please...", placeholder="Prompt", label_visibility="visible")
+    #     model = genai.GenerativeModel("gemini-pro")
 
-        if st.button("SEND", use_container_width=True):
-            response = model.generate_content(prompt)
+    #     if st.button("SEND", use_container_width=True):
+    #         response = model.generate_content(prompt)
 
-            st.write("")
-            st.header(":blue[Response]")
-            st.write("")
+    #         st.write("")
+    #         st.header(":blue[Response]")
+    #         st.write("")
 
-            st.markdown(response.text)
+    #         st.markdown(response.text)
 
     with gemini_vision:
         st.header("Interact with CODA Vision")
