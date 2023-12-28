@@ -5,27 +5,26 @@ import google.generativeai as genai
 import google.ai.generativelanguage as glm
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
-from langchain.utilities import SerpAPIWrapper
 from langchain.chains import LLMChain
 from typing import List, Union
 from langchain.schema import AgentAction, AgentFinish, OutputParserException
 import re
 from PIL import Image
+from langchain.tools import DuckDuckGoSearchRun
 import os
 import io
 
 # load_dotenv()
 
 os.environ["GOOGLE_API_KEY"] ="AIzaSyDqKzb2p4ItiEEao-oim5IcGgAifOtv6do"
-os.environ["SERPAPI_API_KEY"] ="f6384dec8fb9a930c7c2c1e39145d282f28ab8f1500d129aa98304fe7f394c33"
 
 
-search = SerpAPIWrapper()
+search = DuckDuckGoSearchRun()
 tools = [
     Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events"
+        description="useful for when you need to answer questions about current events,time,weather,name,meaning"
     )
 ]
 # Set up the base template
