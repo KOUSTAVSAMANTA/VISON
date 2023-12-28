@@ -3,12 +3,12 @@
 import streamlit as st
 import google.generativeai as genai
 import google.ai.generativelanguage as glm
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from PIL import Image
 import os
 import io
 
-load_dotenv()
+# load_dotenv()
 
 os.environ["GOOGLE_API_KEY"] ="AIzaSyDqKzb2p4ItiEEao-oim5IcGgAifOtv6do"
 
