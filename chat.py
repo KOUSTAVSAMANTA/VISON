@@ -25,7 +25,7 @@ genai.configure(api_key=API_KEY)
 # st.image("./Google-Gemini-AI-Logo.png", width=200)
 st.write("")
 
-gemini_vision = st.tabs(["CODA Vision"])
+gemini,gemini_vision = st.tabs(["CODA","CODA Vision"])
 
 
 def main():
