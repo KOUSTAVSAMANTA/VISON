@@ -34,6 +34,8 @@ math_tool = Tool.from_function(
         name="Calculator",
         description="Useful for when you need to answer questions about math. This tool is only for math questions and nothing else. Only input math expressions.",
     )
+
+tools = [search,math_tool]
 # Set up the base template
 template = """Answer the following questions as best you can. 
 iformation about yourself is your name is CODA you are able to answer any question you are developed by Koustav powered by Gemini.
@@ -91,7 +93,7 @@ class CustomPromptTemplate(StringPromptTemplate):
 
 prompt = CustomPromptTemplate(
     template=template,
-    tools=[search,math_tool],
+    tools=tools,
     # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
     # This includes the `intermediate_steps` variable because that is needed
     input_variables=["input", "chat_history","intermediate_steps"]
