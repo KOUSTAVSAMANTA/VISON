@@ -12,6 +12,7 @@ from langchain.schema import AgentAction, AgentFinish, OutputParserException
 import re
 from langchain.tools import DuckDuckGoSearchRun
 from PIL import Image
+from langchain import LLMMathChain
 import os
 import io
 
@@ -20,13 +21,19 @@ os.environ["GOOGLE_API_KEY"] ="AIzaSyDqKzb2p4ItiEEao-oim5IcGgAifOtv6do"
 
 search = DuckDuckGoSearchRun()
 # search = SerpAPIWrapper()
-tools = [
-    Tool(
+search = Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning,internet,searches"
+        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning"
     )
-]
+
+llm = ChatGoogleGenerativeAI(model="gemini-pro")
+llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
+math_tool = Tool.from_function(
+        func=llm_math_chain.run,
+        name="Calculator",
+        description="Useful for when you need to answer questions about math. This tool is only for math questions and nothing else. Only input math expressions.",
+    )
 # Set up the base template
 template = """Answer the following questions as best you can. 
 iformation about yourself is your name is CODA you are able to answer any question you are developed by Koustav powered by Gemini.
@@ -84,7 +91,7 @@ class CustomPromptTemplate(StringPromptTemplate):
 
 prompt = CustomPromptTemplate(
     template=template,
-    tools=tools,
+    tools=[search,math_tool],
     # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
     # This includes the `intermediate_steps` variable because that is needed
     input_variables=["input", "chat_history","intermediate_steps"]
@@ -124,7 +131,7 @@ def get_res(q):
         stop=["Observation"],
         allowed_tools=tool_names,
     )
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True,memory=memory,handle_parsing_errors=True)
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True,memory=memory)
     z = agent_executor.run(q)
     return z
 def image_to_byte_array(image: Image) -> bytes:
@@ -147,9 +154,7 @@ def main():
     with gemini_pro:
         st.header("Interact with CODA")
         st.write("")
-        if st.button("Reset Memory"):
-            st.session_state.memory = ConversationBufferMemory(memory_key=memory_key)
-            
+
         prompt = st.text_input("prompt please...", placeholder="Prompt", label_visibility="visible")
         # model = genai.GenerativeModel("gemini-pro")
 
