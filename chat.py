@@ -1,4 +1,4 @@
-# Author - MrSentinel
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 import streamlit as st
 import google.generativeai as genai
@@ -6,36 +6,43 @@ import google.ai.generativelanguage as glm
 from langchain.agents import Tool, AgentExecutor, LLMSingleActionAgent, AgentOutputParser
 from langchain.prompts import StringPromptTemplate
 from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferMemory
 from typing import List, Union
 from langchain.schema import AgentAction, AgentFinish, OutputParserException
 import re
-from PIL import Image
 from langchain.tools import DuckDuckGoSearchRun
+from PIL import Image
 import os
 import io
 
-# load_dotenv()
 
 os.environ["GOOGLE_API_KEY"] ="AIzaSyDqKzb2p4ItiEEao-oim5IcGgAifOtv6do"
 
-
 search = DuckDuckGoSearchRun()
+# search = SerpAPIWrapper()
 tools = [
     Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events,time,weather,name,meaning"
+        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning"
     )
 ]
 # Set up the base template
-template = """Answer the following questions as best you can. You have access to the following tools:
+template = """Answer the following questions as best you can. 
+iformation about yourself is your name is CODA you are able to answer any question you are developed by Koustav powered by Gemini.
+only if you dont know any answer try to use the Search tool to get the information and answer accordingly
+You are a nice chatbot having a conversation with a human
+you dont need too use tools to recall memory
+You have access to the following tools:
 
 {tools}
 
 Use the following format:
 
+Previous conversation:
+{chat_history}
 Question: the input question you must answer
-Thought: you should always think about what to do
+Thought: you should only think about what to do if you need to
 Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
@@ -48,6 +55,9 @@ Begin!
 Question: {input}
 {agent_scratchpad}"""
 
+memory_key = "chat_history"
+if "memory" not in st.session_state:
+    st.session_state.memory = ConversationBufferMemory(memory_key=memory_key)
 # Set up a prompt template
 class CustomPromptTemplate(StringPromptTemplate):
     # The template to use
@@ -76,7 +86,7 @@ prompt = CustomPromptTemplate(
     tools=tools,
     # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
     # This includes the `intermediate_steps` variable because that is needed
-    input_variables=["input", "intermediate_steps"]
+    input_variables=["input", "chat_history","intermediate_steps"]
 )
 
 class CustomOutputParser(AgentOutputParser):
@@ -103,15 +113,17 @@ class CustomOutputParser(AgentOutputParser):
 def get_res(q):
     output_parser = CustomOutputParser()
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
+
+    memory = st.session_state.memory
     llm_chain = LLMChain(llm=llm, prompt=prompt)
     tool_names = [tool.name for tool in tools]
     agent = LLMSingleActionAgent(
         llm_chain=llm_chain,
         output_parser=output_parser,
         stop=["Observation"],
-        allowed_tools=tool_names
+        allowed_tools=tool_names,
     )
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True)
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True,memory=memory)
     z = agent_executor.run(q)
     return z
 def image_to_byte_array(image: Image) -> bytes:
