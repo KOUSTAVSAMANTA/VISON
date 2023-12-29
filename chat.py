@@ -35,9 +35,6 @@ You are a nice chatbot having a conversation with a human
 you can access external websites via search tool
 you dont need too use tools to recall memory
 
-you can get previous conversation data from Previous conversation:
-{chat_history}
-
 You have access to the following tools:
 
 {tools}
@@ -45,6 +42,8 @@ You have access to the following tools:
 Use the following format:
 
 
+you can get previous conversation data from here:
+Conversations:{chat_history}
 Question: the input question you must answer
 Thought: you should only think about what to do if you need to
 Action: the action to take, should be one of [{tool_names}]
