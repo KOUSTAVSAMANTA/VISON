@@ -24,11 +24,11 @@ tools = [
     Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning,internet,searches.it is not usefull for recalling memories or casual chats"
+        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning,internet,searches"
     )
 ]
 # Set up the base template
-template = """Answer the following questions as best you can. 
+template = """Answer the following questions as best you can and handle all questions you will response to all questions. 
 iformation about yourself is your name is CODA you are able to answer any question you are developed by Koustav powered by Gemini.
 only if you dont know any answer try to use the Search tool to get the information and answer accordingly
 You are a nice chatbot having a conversation with a human
