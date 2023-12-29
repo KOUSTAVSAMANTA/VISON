@@ -148,7 +148,9 @@ def main():
     with gemini_pro:
         st.header("Interact with CODA")
         st.write("")
-
+        if st.button("Reset Memory"):
+            st.session_state.memory = ConversationBufferMemory(memory_key=memory_key)
+            
         prompt = st.text_input("prompt please...", placeholder="Prompt", label_visibility="visible")
         # model = genai.GenerativeModel("gemini-pro")
 
