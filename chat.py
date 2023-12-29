@@ -24,7 +24,7 @@ tools = [
     Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning,anything related to interner, or searches,except recalling memories"
+        description="useful for when you need to answer questions about current events,years,dates,time,weather,name,meaning,internet,searches.it is not usefull for recalling memories or casual chats"
     )
 ]
 # Set up the base template
