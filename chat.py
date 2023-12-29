@@ -123,7 +123,7 @@ def get_res(q):
         stop=["Observation"],
         allowed_tools=tool_names,
     )
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True,memory=memory)
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True,memory=memory,handle_parsing_errors=True)
     z = agent_executor.run(q)
     return z
 def image_to_byte_array(image: Image) -> bytes:
