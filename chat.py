@@ -29,13 +29,13 @@ search = Tool(
 
 llm = ChatGoogleGenerativeAI(model="gemini-pro")
 llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
-math_tool = Tool.from_function(
-        func=llm_math_chain.run,
-        name="Calculator",
-        description="Useful for when you need to answer questions about math. This tool is only for math questions and nothing else. Only input math expressions.",
-    )
+# math_tool = Tool.from_function(
+#         func=llm_math_chain.run,
+#         name="Calculator",
+#         description="Useful for when you need to answer questions about math. This tool is only for math questions and nothing else. Only input math expressions.",
+#     )
 
-tools = [search,math_tool]
+tools = [search]
 # Set up the base template
 template = """Answer the following questions as best you can. 
 iformation about yourself is your name is CODA you are able to answer any question you are developed by Koustav powered by Gemini.
